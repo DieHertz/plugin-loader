@@ -1,0 +1,15 @@
+all: bin/plugin_loader.exe bin/test_plugin.dll
+
+run: bin/plugin_loader.exe bin/test_plugin.dll
+	bin/plugin_loader.exe bin/test_plugin.dll non-existent-plugin-path
+
+bin/plugin_loader.exe: src/plugin_loader.cpp src/plugin_interface.h \
+	src/scope_exit.h src/dynamic_lib.h src/dynamic_lib.cpp \
+	src/dynamic_lib_impl_win.h
+	g++ src/plugin_loader.cpp src/dynamic_lib.cpp -std=c++11 -o bin/plugin_loader.exe
+
+bin/test_plugin.dll: src/test_plugin.cpp src/plugin_interface.h
+	g++ -shared src/test_plugin.cpp -std=c++11 -o bin/test_plugin.dll
+
+clean:
+	del bin/*
